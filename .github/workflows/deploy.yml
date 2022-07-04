@@ -53,6 +53,13 @@ jobs:
           yarn build:back
           yarn build:front
           yarn package:mac
+      
+      - name: Upload to S3
+        env:
+          AWS_ACCESS_KEY: ${{ secrets.AWS_ACCESS_KEY }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          S3_BUCKET: ${{ secrets.S3_BUCKET }}
+        run: python3 scripts/upload.py
 
   deploy-windows:
     runs-on: windows-latest
@@ -89,5 +96,11 @@ jobs:
         run: |
           yarn build:back
           yarn build:front
-          yarn package:mac
+          yarn package:win
   
+      - name: Upload to S3
+        env:
+          AWS_ACCESS_KEY: ${{ secrets.AWS_ACCESS_KEY }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          S3_BUCKET: ${{ secrets.S3_BUCKET }}
+        run: python3 scripts/upload.py
