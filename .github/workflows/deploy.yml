@@ -1,0 +1,19 @@
+name: Deployment
+
+on:
+  release:
+    types: [ published ]
+
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+
+jobs:
+  deploy-mac:
+    runs-on: macos-latest
+
+    steps:
+      - name: Checkout source code repo
+      - run: |
+          git checkout dsads
+  
+      
