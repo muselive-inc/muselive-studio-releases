@@ -2,10 +2,7 @@ name: Deployment
 
 on:
   release:
-    types: [ published ]
-
-  # Allows you to run this workflow manually from the Actions tab
-  workflow_dispatch:
+    types: [ created ]
 
 jobs:
   deploy-mac:
