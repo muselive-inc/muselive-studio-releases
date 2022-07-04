@@ -35,4 +35,12 @@ jobs:
           cd audio_process
           pip install -U pip
           pip install -r requirements-dev.txt
+      
+      - name: Build Artifacts
+        env:
+          GH_TOKEN: ${{ secrets.GH_TOKEN }}
+        run: |
+          yarn build:back
+          yarn build:front
+          yarn package:mac-nosign
   
