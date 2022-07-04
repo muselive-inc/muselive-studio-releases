@@ -18,6 +18,24 @@ jobs:
           GH_TOKEN: ${{ secrets.GH_TOKEN }}
         run: |
           git clone https://"$GH_USER":"$GH_TOKEN"@github.com/muselive-inc/muselive-studio-v2.git
+          cd muselive-studio-v2
+          ls
   
-  
+      - name: Setup Node.js environment
+        uses: actions/setup-node@v3.3.0
+        with:
+          node-version: 17
+          cache: yarn
       
+      - name: Setup Python
+        uses: actions/setup-python@v4.0.0
+        with:
+          python-version: 3.7
+  
+      - name: Install Dependencies
+        run: |
+          yarn
+          cd audio_process
+          pip install -U pip
+          pip install -r requirements-dev.txt
+  
