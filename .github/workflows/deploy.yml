@@ -13,13 +13,10 @@ jobs:
 
     steps:
       - name: Checkout source code repo
-        env:
-          GH_USER: ${{ secrets.GH_USER }}
-          GH_TOKEN: ${{ secrets.GH_TOKEN }}
-        run: |
-          git clone https://"$GH_USER":"$GH_TOKEN"@github.com/muselive-inc/muselive-studio-v2.git
-          cd muselive-studio-v2
-          ls
+        uses: actions/checkout@v2.4.2
+        with:
+          ref: muselive-inc/muselive-studio-v2
+          token: ${{ secrets.GH_TOKEN }}
   
       - name: Setup Node.js environment
         uses: actions/setup-node@v3.3.0
