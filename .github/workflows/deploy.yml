@@ -17,7 +17,7 @@ jobs:
           GH_USER: ${{ secrets.GH_USER }}
           GH_TOKEN: ${{ secrets.GH_TOKEN }}
         run: |
-          git checkout https://"$GH_USER":"$GH_TOKEN"@github.com/muselive-inc/muselive-studio-v2.git
+          git clone https://"$GH_USER":"$GH_TOKEN"@github.com/muselive-inc/muselive-studio-v2.git
   
   
       
