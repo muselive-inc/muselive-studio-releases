@@ -15,7 +15,7 @@ jobs:
       - name: Checkout source code repo
         uses: actions/checkout@v2.4.2
         with:
-          ref: muselive-inc/muselive-studio-v2
+          repository: muselive-inc/muselive-studio-v2
           token: ${{ secrets.GH_TOKEN }}
   
       - name: Setup Node.js environment
