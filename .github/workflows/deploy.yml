@@ -16,6 +16,7 @@ jobs:
         uses: actions/checkout@v2.4.2
         with:
           repository: muselive-inc/muselive-studio-v2
+          ref: develop
           token: ${{ secrets.GH_TOKEN }}
   
       - name: Setup Node.js environment
@@ -36,11 +37,18 @@ jobs:
           pip install -U pip
           pip install -r requirements-dev.txt
       
+      - name: "Import Certificate: Developer ID"
+        uses: devbotsxyz/import-signing-certificate@v1.0.0
+        with:
+          certificate-data: ${{ secrets.CERTIFICATES_P12 }}
+          certificate-passphrase: ${{ secrets.CERTIFICATES_P12_PASSWORD }}
+          keychain-password: ${{ secrets.CERTIFICATES_P12_PASSWORD }}
+  
       - name: Build Artifacts
         env:
           GH_TOKEN: ${{ secrets.GH_TOKEN }}
         run: |
           yarn build:back
           yarn build:front
-          yarn package:mac-nosign
+          yarn package:mac
   
