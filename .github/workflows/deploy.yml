@@ -34,6 +34,11 @@ jobs:
           pip install -U pip
           pip install -r requirements-dev.txt
       
+      - name: Download FFMPEG Binary
+        run: |
+          python3 scripts/download_ffmpeg.py
+          chmod +x stream_process/ffmpeg
+      
       - name: "Import Certificate: Developer ID"
         uses: devbotsxyz/import-signing-certificate@v1.0.0
         with:
@@ -86,6 +91,10 @@ jobs:
           cd audio_process
           pip install -U pip
           pip install -r requirements-dev.txt
+  
+      - name: Download FFMPEG Binary
+        run: |
+          python3 scripts/download_ffmpeg.py
   
       - name: Build Artifacts
         env:
