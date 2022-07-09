@@ -1,4 +1,4 @@
-oname: Deployment
+name: Deployment
 
 on:
   release:
