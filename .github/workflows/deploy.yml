@@ -55,7 +55,7 @@ jobs:
         run: |
           yarn build:back
           yarn build:front
-          yarn package:mac
+          yarn release
       
       - name: Upload to S3
         env:
