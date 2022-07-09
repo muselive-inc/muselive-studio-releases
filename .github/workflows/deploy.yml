@@ -1,4 +1,4 @@
-name: Deployment
+oname: Deployment
 
 on:
   release:
@@ -103,7 +103,7 @@ jobs:
         run: |
           yarn build:back
           yarn build:front
-          yarn package:win
+          yarn release
   
       - name: Upload to S3
         env:
