@@ -48,11 +48,10 @@ jobs:
 #       - name: Install ninja-build tool
 #         uses: seanmiddleditch/gha-setup-ninja@v3
       
-#       - name: Setup Cpp (C++ / C)
-#         uses: aminya/setup-cpp@v0.24.1
-#         with:
-#           compiler: clang
-#           ninja: 1.10.2
+      - name: Setup Cpp (C++ / C)
+        uses: aminya/setup-cpp@v0.24.1
+        with:
+          ninja: 1.10.2
       
       - name: Build
         run: |
