@@ -22,8 +22,8 @@ jobs:
     
       - name: Check Installation
         run: |
-          find ${{env.Qt5_Dir}}
-          echo ${{env.Qt5_Dir}}
+          find ${{env.Qt6_Dir}}
+          echo ${{env.Qt6_Dir}}
           cmake
           foo
       
@@ -68,50 +68,3 @@ jobs:
           S3_BUCKET: ${{ secrets.S3_BUCKET }}
         run: python3 scripts/upload.py
 
-  deploy-windows:
-    runs-on: windows-latest
-
-    steps:
-      - name: Checkout source code repo
-        uses: actions/checkout@v2.4.2
-        with:
-          repository: muselive-inc/muselive-studio-v2
-          ref: develop
-          token: ${{ secrets.GH_TOKEN }}
-  
-      - name: Setup Node.js environment
-        uses: actions/setup-node@v3.3.0
-        with:
-          node-version: 17
-          cache: yarn
-      
-      - name: Setup Python
-        uses: actions/setup-python@v4.0.0
-        with:
-          python-version: 3.7
-  
-      - name: Install Dependencies
-        run: |
-          yarn
-          cd audio_process
-          pip install -U pip
-          pip install -r requirements-dev.txt
-  
-      - name: Download FFMPEG Binary
-        run: |
-          python3 scripts/download_ffmpeg.py
-  
-      - name: Build Artifacts
-        env:
-          GH_TOKEN: ${{ secrets.GH_TOKEN }}
-        run: |
-          yarn build:back
-          yarn build:front
-          yarn release
-  
-      - name: Upload to S3
-        env:
-          AWS_ACCESS_KEY: ${{ secrets.AWS_ACCESS_KEY }}
-          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          S3_BUCKET: ${{ secrets.S3_BUCKET }}
-        run: python3 scripts/upload.py
