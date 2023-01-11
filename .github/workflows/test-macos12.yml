@@ -1,4 +1,4 @@
-name: Monterey x86_64
+name: Monterey x86_64 Test
 
 # Controls when the workflow will run
 on:
