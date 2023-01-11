@@ -14,6 +14,22 @@ jobs:
           repository: muselive-inc/museLIVEStudio
           ref: main
           token: ${{ secrets.GH_TOKEN }}
+    
+      - name: Setup Cpp (C++ / C)
+        id: install_cc
+        uses: aminya/setup-cpp@v0.24.1
+        with:
+          compiler: clang
+          ninja: 1.10.2
+    
+      - name: Check compiler
+        shell: bash
+        env:
+            CC: ${{ steps.install_cc.outputs.cc }}
+            CXX: ${{ steps.install_cc.outputs.cxx }}
+        run: |
+            echo ${{ env.CC }} ${{ env.CXX }}
+            ls /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin
   
       - name: Install Qt
         uses: jurplel/install-qt-action@v3.0.0
@@ -31,11 +47,11 @@ jobs:
 #       - name: Install ninja-build tool
 #         uses: seanmiddleditch/gha-setup-ninja@v3
       
-      - name: Setup Cpp (C++ / C)
-        uses: aminya/setup-cpp@v0.24.1
-        with:
-          gcc: 13.1.6
-          ninja: 1.10.2
+#       - name: Setup Cpp (C++ / C)
+#         uses: aminya/setup-cpp@v0.24.1
+#         with:
+#           compiler: clang
+#           ninja: 1.10.2
       
       - name: Build
         run: |
