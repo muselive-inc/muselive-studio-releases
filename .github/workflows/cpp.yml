@@ -62,7 +62,7 @@ jobs:
           FFMPEG_ROOT_DIR=$(brew --prefix ffmpeg)
           echo $OPENSSL_ROOT_DIR $FFMPEG_ROOT_DIR
           cmake -S .. -B . -D CMAKE_GENERATOR:STRING=Ninja -DCMAKE_C_COMPILER:FILEPATH=/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang -DCMAKE_CXX_COMPILER:FILEPATH=/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang++ -DCMAKE_BUILD_TYPE:STRING=Release -DCMAKE_PREFIX_PATH:PATH=${{env.Qt6_DIR}} -DOPENSSL_ROOT_DIR:STRING=${OPENSSL_ROOT_DIR} -DOPENSSL_INCLUDE_DIR:STRING=${OPENSSL_ROOT_DIR}/include -DFFMPEG_ROOT_DIR:STRING=${FFMPEG_ROOT_DIR}
-          cmake build . --target all
+          cmake --build . --target all
       
       - name: "Import Certificate: Developer ID"
         uses: devbotsxyz/import-signing-certificate@v1.0.0
