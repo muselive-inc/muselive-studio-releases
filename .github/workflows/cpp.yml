@@ -32,8 +32,12 @@ jobs:
         run: |
           mkdir build
           cd build
-          cmake -S .. -B . -D CMAKE_GENERATOR:STRING=Ninja -DCMAKE_BUILD_TYPE:STRING=Release -DCMAKE_PREFIX_PATH:PATH=${{env.Qt6_DIR}}/macos -DOPENSSL_ROOT_DIR:STRING=/opt/homebrew/opt/openssl@3 -DFFMPEG_ROOT_DIR:STRING=/opt/homebrew/opt/ffmpeg
-      
+          OPENSSL_ROOT_DIR=$(brew --prefix openssl)
+          FFMPEG_ROOT_DIR=${brew --prefix ffmpeg)
+          echo $OPENSSL_ROOT_DIR $FFMPEG_ROOT_DIR
+          cmake -S .. -B . -D CMAKE_GENERATOR:STRING=Ninja -DCMAKE_BUILD_TYPE:STRING=Release -DCMAKE_PREFIX_PATH:PATH=${{env.Qt6_DIR}}/macos -DOPENSSL_ROOT_DIR:STRING=${OPENSSL_ROOT_DIR} -DOPENSSL_INCLUDE_DIR:STRING=${OPENSSL_ROOT_DIR}/include -DFFMPEG_ROOT_DIR:STRING=${FFMPEG_ROOT_DIR}
+          cmake build . --target all
+          
       - name: Download FFMPEG Binary
         run: |
           python3 scripts/download_ffmpeg.py
