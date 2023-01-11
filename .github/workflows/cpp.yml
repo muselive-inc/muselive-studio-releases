@@ -22,8 +22,8 @@ jobs:
     
       - name: Check Installation
         run: |
-          find ${{env.Qt6_Dir}}
-          echo ${{env.Qt6_Dir}}
+          find ${{env.Qt6_DIR}}
+          echo ${{env.Qt6_DIR}}
           cmake
           foo
       
