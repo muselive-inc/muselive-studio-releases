@@ -27,6 +27,12 @@ jobs:
       - name: Install Dependencies
         run: |
           brew install openssl@1.1 ffmpeg
+  
+      - name: Install ninja-build tool
+        uses: seanmiddleditch/gha-setup-ninja@v3
+      
+      - name: Setup Cpp (C++ / C)
+        uses: aminya/setup-cpp@v0.24.1
       
       - name: Build
         run: |
