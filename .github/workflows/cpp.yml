@@ -15,21 +15,21 @@ jobs:
           ref: main
           token: ${{ secrets.GH_TOKEN }}
     
-      - name: Setup Cpp (C++ / C)
-        id: install_cc
-        uses: aminya/setup-cpp@v0.24.1
-        with:
-          compiler: clang
-          ninja: 1.10.2
+#       - name: Setup Cpp (C++ / C)
+#         id: install_cc
+#         uses: aminya/setup-cpp@v0.24.1
+#         with:
+#           compiler: clang
+#           ninja: 1.10.2
     
-      - name: Check compiler
-        shell: bash
-        env:
-            CC: ${{ steps.install_cc.outputs.cc }}
-            CXX: ${{ steps.install_cc.outputs.cxx }}
-        run: |
-            echo ${{ env.CC }} ${{ env.CXX }}
-            ls /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin
+#       - name: Check compiler
+#         shell: bash
+#         env:
+#             CC: ${{ steps.install_cc.outputs.cc }}
+#             CXX: ${{ steps.install_cc.outputs.cxx }}
+#         run: |
+#             echo ${{ env.CC }} ${{ env.CXX }}
+#             ls /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin
   
       - name: Install Qt
         uses: jurplel/install-qt-action@v3.0.0
@@ -60,7 +60,7 @@ jobs:
           OPENSSL_ROOT_DIR=$(brew --prefix openssl)
           FFMPEG_ROOT_DIR=$(brew --prefix ffmpeg)
           echo $OPENSSL_ROOT_DIR $FFMPEG_ROOT_DIR
-          cmake -S .. -B . -D CMAKE_GENERATOR:STRING=Ninja -DCMAKE_BUILD_TYPE:STRING=Release -DCMAKE_PREFIX_PATH:PATH=${{env.Qt6_DIR}} -DOPENSSL_ROOT_DIR:STRING=${OPENSSL_ROOT_DIR} -DOPENSSL_INCLUDE_DIR:STRING=${OPENSSL_ROOT_DIR}/include -DFFMPEG_ROOT_DIR:STRING=${FFMPEG_ROOT_DIR}
+          cmake -S .. -B . -D CMAKE_GENERATOR:STRING=Ninja -DCMAKE_C_COMPILER:FILEPATH=/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang -DCMAKE_CXX_COMPILER:FILEPATH=/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang++ -DCMAKE_BUILD_TYPE:STRING=Release -DCMAKE_PREFIX_PATH:PATH=${{env.Qt6_DIR}} -DOPENSSL_ROOT_DIR:STRING=${OPENSSL_ROOT_DIR} -DOPENSSL_INCLUDE_DIR:STRING=${OPENSSL_ROOT_DIR}/include -DFFMPEG_ROOT_DIR:STRING=${FFMPEG_ROOT_DIR}
           cmake build . --target all
           
       - name: Download FFMPEG Binary
