@@ -14,6 +14,7 @@ jobs:
           repository: muselive-inc/museLIVEStudio
           ref: main
           token: ${{ secrets.GH_TOKEN }}
+          submodules: recursive
     
 #       - name: Setup Cpp (C++ / C)
 #         id: install_cc
