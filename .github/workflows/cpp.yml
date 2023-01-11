@@ -40,6 +40,7 @@ jobs:
       - name: Check Installation
         run: |
           echo ${{env.Qt6_DIR}}
+          /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang++ --version
   
       - name: Install Dependencies
         run: |
