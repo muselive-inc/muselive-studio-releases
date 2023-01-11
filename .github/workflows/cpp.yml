@@ -16,22 +16,6 @@ jobs:
           token: ${{ secrets.GH_TOKEN }}
           submodules: recursive
     
-#       - name: Setup Cpp (C++ / C)
-#         id: install_cc
-#         uses: aminya/setup-cpp@v0.24.1
-#         with:
-#           compiler: clang
-#           ninja: 1.10.2
-    
-#       - name: Check compiler
-#         shell: bash
-#         env:
-#             CC: ${{ steps.install_cc.outputs.cc }}
-#             CXX: ${{ steps.install_cc.outputs.cxx }}
-#         run: |
-#             echo ${{ env.CC }} ${{ env.CXX }}
-#             ls /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin
-  
       - name: Install Qt
         uses: jurplel/install-qt-action@v3.0.0
         with:
@@ -45,9 +29,6 @@ jobs:
       - name: Install Dependencies
         run: |
           brew install openssl@1.1 ffmpeg
-  
-#       - name: Install ninja-build tool
-#         uses: seanmiddleditch/gha-setup-ninja@v3
       
       - name: Setup Cpp (C++ / C)
         uses: aminya/setup-cpp@v0.24.1
@@ -62,7 +43,6 @@ jobs:
           FFMPEG_ROOT_DIR=$(brew --prefix ffmpeg)
           echo $OPENSSL_ROOT_DIR $FFMPEG_ROOT_DIR
           cmake -S .. -B . -D CMAKE_GENERATOR:STRING=Ninja -DCMAKE_C_COMPILER:FILEPATH=/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang -DCMAKE_CXX_COMPILER:FILEPATH=/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang++ -DCMAKE_BUILD_TYPE:STRING=Release -DCMAKE_PREFIX_PATH:PATH=${{env.Qt6_DIR}} -DOPENSSL_ROOT_DIR:STRING=${OPENSSL_ROOT_DIR} -DOPENSSL_INCLUDE_DIR:STRING=${OPENSSL_ROOT_DIR}/include -DFFMPEG_ROOT_DIR:STRING=${FFMPEG_ROOT_DIR}
-          ninja
           cmake --build . --target all
       
       - name: "Import Certificate: Developer ID"
@@ -74,11 +54,11 @@ jobs:
   
       - name: Build Artifacts
         env:
-          GH_TOKEN: ${{ secrets.GH_TOKEN }}
           APPLE_ID: ${{ secrets.APPLE_ID }}
           APPLE_ID_PW: ${{ secrets.APPLE_ID_PW }}
+          APPLE_TEAM_ID: ${{ secrets.APPLE_TEAM_ID }}
         run: |
-          ./build.sh
+          ./build.sh build ${{ env.APPLE_ID }} ${{ env.APPLE_ID_PW }} ${{ env.APPLE_TEAM_ID }} 0.11.0
       
       - name: Upload to S3
         env:
