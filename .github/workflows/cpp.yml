@@ -1,0 +1,117 @@
+name: Deployment C++ Studio
+
+on:
+  workflow_dispatch:
+
+jobs:
+  deploy-mac:
+    runs-on: macos-12
+
+    steps:
+      - name: Checkout source code repo
+        uses: actions/checkout@v2.4.2
+        with:
+          repository: muselive-inc/museLIVEStudio
+          ref: main
+          token: ${{ secrets.GH_TOKEN }}
+  
+      - name: Install Qt
+        uses: jurplel/install-qt-action@v3.0.0
+        with:
+          version: 6.4.0
+    
+      - name: Check Installation
+        run: |
+          find ${{env.Qt5_Dir}}
+          echo ${{env.Qt5_Dir}}
+          cmake
+          foo
+      
+      - name: Setup Python
+        uses: actions/setup-python@v4.0.0
+        with:
+          python-version: 3.7
+  
+      - name: Install Dependencies
+        run: |
+          yarn
+          cd audio_process
+          pip install -U pip
+          pip install -r requirements-dev.txt
+      
+      - name: Download FFMPEG Binary
+        run: |
+          python3 scripts/download_ffmpeg.py
+          chmod +x stream_process/ffmpeg
+      
+      - name: "Import Certificate: Developer ID"
+        uses: devbotsxyz/import-signing-certificate@v1.0.0
+        with:
+          certificate-data: ${{ secrets.CERTIFICATES_P12 }}
+          certificate-passphrase: ${{ secrets.CERTIFICATES_P12_PASSWORD }}
+          keychain-password: ${{ secrets.CERTIFICATES_P12_PASSWORD }}
+  
+      - name: Build Artifacts
+        env:
+          GH_TOKEN: ${{ secrets.GH_TOKEN }}
+          APPLE_ID: ${{ secrets.APPLE_ID }}
+          APPLE_ID_PW: ${{ secrets.APPLE_ID_PW }}
+        run: |
+          yarn build:back
+          yarn build:front
+          yarn release
+      
+      - name: Upload to S3
+        env:
+          AWS_ACCESS_KEY: ${{ secrets.AWS_ACCESS_KEY }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          S3_BUCKET: ${{ secrets.S3_BUCKET }}
+        run: python3 scripts/upload.py
+
+  deploy-windows:
+    runs-on: windows-latest
+
+    steps:
+      - name: Checkout source code repo
+        uses: actions/checkout@v2.4.2
+        with:
+          repository: muselive-inc/muselive-studio-v2
+          ref: develop
+          token: ${{ secrets.GH_TOKEN }}
+  
+      - name: Setup Node.js environment
+        uses: actions/setup-node@v3.3.0
+        with:
+          node-version: 17
+          cache: yarn
+      
+      - name: Setup Python
+        uses: actions/setup-python@v4.0.0
+        with:
+          python-version: 3.7
+  
+      - name: Install Dependencies
+        run: |
+          yarn
+          cd audio_process
+          pip install -U pip
+          pip install -r requirements-dev.txt
+  
+      - name: Download FFMPEG Binary
+        run: |
+          python3 scripts/download_ffmpeg.py
+  
+      - name: Build Artifacts
+        env:
+          GH_TOKEN: ${{ secrets.GH_TOKEN }}
+        run: |
+          yarn build:back
+          yarn build:front
+          yarn release
+  
+      - name: Upload to S3
+        env:
+          AWS_ACCESS_KEY: ${{ secrets.AWS_ACCESS_KEY }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          S3_BUCKET: ${{ secrets.S3_BUCKET }}
+        run: python3 scripts/upload.py
