@@ -28,18 +28,21 @@ jobs:
         run: |
           brew install openssl@1.1 ffmpeg
   
-      - name: Install ninja-build tool
-        uses: seanmiddleditch/gha-setup-ninja@v3
+#       - name: Install ninja-build tool
+#         uses: seanmiddleditch/gha-setup-ninja@v3
       
       - name: Setup Cpp (C++ / C)
         uses: aminya/setup-cpp@v0.24.1
+        with:
+          gcc: 13.1.6
+          ninja: 1.10.2
       
       - name: Build
         run: |
           mkdir build
           cd build
           OPENSSL_ROOT_DIR=$(brew --prefix openssl)
-          FFMPEG_ROOT_DIR=${brew --prefix ffmpeg)
+          FFMPEG_ROOT_DIR=$(brew --prefix ffmpeg)
           echo $OPENSSL_ROOT_DIR $FFMPEG_ROOT_DIR
           cmake -S .. -B . -D CMAKE_GENERATOR:STRING=Ninja -DCMAKE_BUILD_TYPE:STRING=Release -DCMAKE_PREFIX_PATH:PATH=${{env.Qt6_DIR}} -DOPENSSL_ROOT_DIR:STRING=${OPENSSL_ROOT_DIR} -DOPENSSL_INCLUDE_DIR:STRING=${OPENSSL_ROOT_DIR}/include -DFFMPEG_ROOT_DIR:STRING=${FFMPEG_ROOT_DIR}
           cmake build . --target all
