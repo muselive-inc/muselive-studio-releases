@@ -1,4 +1,4 @@
-name: Deployment
+name: Python Deployment
 
 on:
   release:
