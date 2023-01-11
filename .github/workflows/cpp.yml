@@ -5,7 +5,10 @@ on:
 
 jobs:
   deploy-mac:
-    runs-on: macos-12
+    strategy:
+      matrix:
+        os: [macos-12, macos-11]
+    runs-on: ${{ matrix.os }}
 
     steps:
       - name: Checkout source code repo
@@ -71,5 +74,5 @@ jobs:
           AWS_ACCESS_KEY: ${{ secrets.AWS_ACCESS_KEY }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           S3_BUCKET: ${{ secrets.S3_BUCKET }}
-        run: python3 upload.py 0.11.0 x86
+        run: python3 upload.py 0.11.0
 
