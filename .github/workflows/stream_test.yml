@@ -32,7 +32,9 @@ jobs:
       
       - name: Build Test Script
         run: |
-          cd test/build
+          cd test
+          mkdir build
+          cd build
           FFMPEG_ROOT_DIR=$(brew --prefix ffmpeg)
           cmake -G Ninja -DFFMPEG_ROOT_DIR=${FFMPEG_ROOT_DIR}
           ninja
