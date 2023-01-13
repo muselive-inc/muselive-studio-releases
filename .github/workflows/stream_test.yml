@@ -1,0 +1,44 @@
+name: Streaming Test
+
+on:
+  workflow_dispatch:
+
+jobs:
+  deploy-mac:
+    runs-on: macos-12
+
+    steps:
+      - name: Checkout source code repo
+        uses: actions/checkout@v2.4.2
+        with:
+          repository: muselive-inc/museLIVEStudio
+          ref: main
+          token: ${{ secrets.GH_TOKEN }}
+          submodules: recursive
+  
+#       - name: Setup Python
+#         uses: actions/setup-python@v4.0.0
+#         with:
+#           python-version: 3.7
+
+      - name: Install Dependencies
+        run: |
+          brew install ffmpeg
+      
+      - name: Setup Cpp (C++ / C)
+        uses: aminya/setup-cpp@v0.24.1
+        with:
+          ninja: 1.10.2
+      
+      - name: Build Test Script
+        run: |
+          cd test/build
+          FFMPEG_ROOT_DIR=$(brew --prefix ffmpeg)
+          cmake -G Ninja -DFFMPEG_ROOT_DIR=${FFMPEG_ROOT_DIR}
+          ninja
+          ./stream cd237076-4412-8ba1-2a07-33e6c69c24bd ../DM.mp3
+      
+      - name: Run Test
+        run: |
+          pwd
+          
