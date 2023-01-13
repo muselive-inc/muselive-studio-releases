@@ -38,9 +38,8 @@ jobs:
           FFMPEG_ROOT_DIR=$(brew --prefix ffmpeg)
           cmake .. -G Ninja -DFFMPEG_ROOT_DIR=${FFMPEG_ROOT_DIR}
           ninja
-          ./stream cd237076-4412-8ba1-2a07-33e6c69c24bd ../DM.mp3
       
       - name: Run Test
         run: |
-          pwd
-          
+          cd test/build
+          ./stream cd237076-4412-8ba1-2a07-33e6c69c24bd ../DM.mp3
